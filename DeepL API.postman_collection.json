@@ -1,0 +1,1691 @@
+{
+	"info": {
+		"_postman_id": "e9e2969d-d589-4d3d-9df6-cc514cf3ee5e",
+		"name": "DeepL API",
+		"description": "This is a Postman collection covering the DeepL API. For a more in depth look at how things work, check out the [official documentation](https://www.deepl.com/docs-api).\n\n### Getting started\n\nTo get started, [sign up for a developer account at deepl.com](https://www.deepl.com/pro-checkout/account?productId=1200&yearly=false&trial=false) and get your authentication key from [your account page](https://www.deepl.com/account/summary).\n\nFrom there, fork this `DeepL API` collection, and select the relevant `baseUrl` variable depending on you subscription (`https://api.deepl.com/v2` for **Pro**, `https://api-free.deepl.com/v2` for **Free**).\n\nIn the Authorization section of your forked collection, you will see the value `DeepL-Auth-Key [yourAuthKey]`. Change `[yourAuthKey]` for your own key and you're ready to go!\n\nWant to get even more involved? [Join the DeepL community on our Discord!](https://discord.gg/deepl)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10725074",
+		"_collection_link": "https://www.postman.com/deepl-api/deepl-api-developers/collection/8fu9jq9/deepl-api?action=share&source=collection_link&creator=10725074"
+	},
+	"item": [
+		{
+			"name": "usage",
+			"item": [
+				{
+					"name": "Check Usage and Limits",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/usage",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"usage"
+							]
+						},
+						"description": "Retrieve usage information within the current billing period together with the corresponding account limits. Usage is returned for:\n- translated characters\n- translated documents\n- translated documents, team totals (for team accounts only)\n\nCharacter usage includes both text and document translations, and is measured by the source text length in Unicode code points,\nso for example \"A\", \"Δ\", \"あ\", and \"深\" are each counted as a single character.\n\nDocument usage only includes document translations, and is measured in individual documents.\n\nDepending on the user account type, some usage types will be omitted.\nCharacter usage is only included for developer accounts.\nDocument usage is only included for non-developer accounts, and team-combined document usage is only included for non-developer team accounts.\n"
+					},
+					"response": [
+						{
+							"name": "The account's usage and limits.\n",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "<API Key>",
+										"description": "Added as a part of security scheme: apikey"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/usage",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"usage"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"character_count\": \"<long>\",\n  \"character_limit\": \"<long>\",\n  \"document_limit\": \"<long>\",\n  \"document_count\": \"<long>\",\n  \"team_document_limit\": \"<long>\",\n  \"team_document_count\": \"<long>\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "translate",
+			"item": [
+				{
+					"name": "Request Translation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "text",
+									"value": "Hello, world!",
+									"description": "(Required) Text to be translated. Only UTF-8-encoded plain text is supported. The parameter may be specified multiple times and translations are returned in the same order as they are requested. Each of the parameter values may contain multiple sentences."
+								},
+								{
+									"key": "target_lang",
+									"value": "DE",
+									"description": "(Required) The language into which the text should be translated. Options currently available:\n * `BG` - Bulgarian\n * `CS` - Czech\n * `DA` - Danish\n * `DE` - German\n * `EL` - Greek\n * `EN` - English (unspecified variant for backward compatibility; please select `EN-GB` or `EN-US` instead)\n * `EN-GB` - English (British)\n * `EN-US` - English (American)\n * `ES` - Spanish\n * `ET` - Estonian\n * `FI` - Finnish\n * `FR` - French\n * `HU` - Hungarian\n * `ID` - Indonesian\n * `IT` - Italian\n * `JA` - Japanese\n * `KO` - Korean\n * `LT` - Lithuanian\n * `LV` - Latvian\n * `NB` - Norwegian (Bokmål)\n * `NL` - Dutch\n * `PL` - Polish\n * `PT` - Portuguese (unspecified variant for backward compatibility; please select `PT-BR` or `PT-PT` instead)\n * `PT-BR` - Portuguese (Brazilian)\n * `PT-PT` - Portuguese (all Portuguese varieties excluding Brazilian Portuguese)\n * `RO` - Romanian\n * `RU` - Russian\n * `SK` - Slovak\n * `SL` - Slovenian\n * `SV` - Swedish\n * `TR` - Turkish\n * `UK` - Ukrainian\n * `ZH` - Chinese (simplified)\n"
+								},
+								{
+									"key": "source_lang",
+									"value": "",
+									"description": "Language of the text to be translated. Options currently available:\n * `BG` - Bulgarian\n * `CS` - Czech\n * `DA` - Danish\n * `DE` - German\n * `EL` - Greek\n * `EN` - English\n * `ES` - Spanish\n * `ET` - Estonian\n * `FI` - Finnish\n * `FR` - French\n * `HU` - Hungarian\n * `ID` - Indonesian\n * `IT` - Italian\n * `JA` - Japanese\n * `KO` - Korean\n * `LT` - Lithuanian\n * `LV` - Latvian\n * `NB` - Norwegian (Bokmål)\n * `NL` - Dutch\n * `PL` - Polish\n * `PT` - Portuguese (all Portuguese varieties mixed)\n * `RO` - Romanian\n * `RU` - Russian\n * `SK` - Slovak\n * `SL` - Slovenian\n * `SV` - Swedish\n * `TR` - Turkish\n * `UK` - Ukrainian\n * `ZH` - Chinese\n\nIf this parameter is omitted, the API will attempt to detect the language of the text and translate it.\n"
+								},
+								{
+									"key": "split_sentences",
+									"value": "1",
+									"description": "Sets whether the translation engine should first split the input into sentences. For text translations where\n`tag_handling` is not set to `html`, the default value is `1`, meaning the engine splits on punctuation and on newlines.\n\nFor text translations where `tag_handling=html`, the default value is `nonewlines`, meaning the engine splits on punctuation only, ignoring newlines.\n\nThe use of `nonewlines` as the default value for text translations where `tag_handling=html` is new behavior that was implemented in November 2022,\nwhen HTML handling was moved out of beta.\n\nPossible values are:\n\n * `0` - no splitting at all, whole input is treated as one sentence\n * `1` (default when `tag_handling` is not set to `html`) - splits on punctuation and on newlines\n * `nonewlines` (default when `tag_handling=html`) - splits on punctuation only, ignoring newlines\n\nFor applications that send one sentence per text parameter, we recommend setting `split_sentences` to `0`, in order to prevent the engine from splitting the sentence unintentionally.\n\n\nPlease note that newlines will split sentences when `split_sentences=1`. We recommend cleaning files so they don't contain breaking sentences or setting the parameter `split_sentences` to `nonewlines`.\n",
+									"disabled": true
+								},
+								{
+									"key": "preserve_formatting",
+									"value": "0",
+									"description": "Sets whether the translation engine should respect the original formatting, even if it would usually correct some aspects. Possible values are:\n * `0` (default)\n * `1`\n\nThe formatting aspects affected by this setting include:\n * Punctuation at the beginning and end of the sentence\n * Upper/lower case at the beginning of the sentence\n",
+									"disabled": true
+								},
+								{
+									"key": "formality",
+									"value": "default",
+									"description": "Sets whether the translated text should lean towards formal or informal language.\nThis feature currently only works for target languages\n`DE` (German),\n`FR` (French),\n`IT` (Italian),\n`ES` (Spanish),\n`NL` (Dutch),\n`PL` (Polish),\n`PT-PT`,\n`PT-BR` (Portuguese)\nand `RU` (Russian).\nSetting this parameter with a target language that does not support formality will fail,\nunless one of the `prefer_...` options are used.\nPossible options are:\n  * `default` (default)\n  * `more` - for a more formal language\n  * `less` - for a more informal language\n  * `prefer_more` - for a more formal language if available, otherwise fallback to default formality\n  * `prefer_less` - for a more informal language if available, otherwise fallback to default formality\n",
+									"disabled": true
+								},
+								{
+									"key": "glossary_id",
+									"value": "<string>",
+									"description": "Specify the glossary to use for the translation. **Important:** This requires the `source_lang` parameter to be set and the language pair of the glossary has to match the language pair of the request.\n",
+									"disabled": true
+								},
+								{
+									"key": "tag_handling",
+									"value": "html",
+									"description": "Sets which kind of tags should be handled. Options currently available:\n * `xml`: Enable XML tag handling; see :apiDocsLink{section=\"xml\"}.\n * `html`: Enable HTML tag handling; see :apiDocsLink{section=\"html\"}.\n",
+									"disabled": true
+								},
+								{
+									"key": "non_splitting_tags",
+									"value": "<string>",
+									"description": "Comma-separated list of XML tags which never split sentences.\n\n\nFor some XML files, finding tags with textual content and splitting sentences using those tags won't yield the best results. The following example shows the engine splitting sentences on `par` tags and proceeding to translate the parts separately, resulting in an incorrect translation:\n * Example request:\n```\n<par>The firm said it had been </par><par> conducting an internal investigation.</par>\n```\n * Example response:\n```\n<par>Die Firma sagte, es sei eine gute Idee gewesen.</par><par> Durchführung einer internen Untersuchung.</par>\n```\n\n\nAs this can lead to bad translations, this type of structure should either be avoided, or the `non_splitting_tags` parameter should be set. The following example shows the same call, with the parameter set to `par`:\n * Example request:\n```\n<par>The firm said it had been </par><par> conducting an internal investigation.</par>\n```\n * Example response:\n```\n<par>Die Firma sagte, dass sie</par><par> eine interne Untersuchung durchgeführt</par><par> habe</par><par>.</par>\n```\n\n\nThis time, the sentence is translated as a whole. The XML tags are now considered markup and copied into the translated sentence. As the translation of the words \"had been\" has moved to another position in the German sentence, the two par tags are duplicated (which is expected here).\n",
+									"disabled": true
+								},
+								{
+									"key": "outline_detection",
+									"value": "0",
+									"description": "The automatic detection of the XML structure won't yield best results in all XML files. You can disable this automatic mechanism altogether by setting the `outline_detection` parameter to `0` and selecting the tags that should be considered structure tags. This will split sentences using the `splitting_tags` parameter.\n\n\nIn the example below, we achieve the same results as the automatic engine by disabling automatic detection with `outline_detection=0` and setting the parameters manually to `tag_handling=xml`, `split_sentences=nonewlines`,  and `splitting_tags=par,title`.\n * Example request:\n   ```\n   <document>\n     <meta>\n       <title>A document's title</title>\n     </meta>\n     <content>\n       <par>This is the first sentence. Followed by a second one.</par>\n       <par>This is the third sentence.</par>\n     </content>\n   </document>\n   ```\n * Example response:\n   ```\n   <document>\n     <meta>\n       <title>Der Titel eines Dokuments</title>\n     </meta>\n     <content>\n       <par>Das ist der erste Satz. Gefolgt von einem zweiten.</par>\n       <par>Dies ist der dritte Satz.</par>\n     </content>\n   </document>\n   ```\nWhile this approach is slightly more complicated, it allows for greater control over the structure of the translation output.\n",
+									"disabled": true
+								},
+								{
+									"key": "splitting_tags",
+									"value": "<string>",
+									"description": "Comma-separated list of XML tags which always cause splits.\n\n\nSee the example in the `outline_detection` parameter's description.\n",
+									"disabled": true
+								},
+								{
+									"key": "ignore_tags",
+									"value": "<string>",
+									"description": "Comma-separated list of XML tags that indicate text not to be translated.\n\n\nUse this paramter to ensure that elements in the original text are not altered in the translation (e.g., trademarks, product names) and insert tags into your original text. In the following example, the `ignore_tags` parameter is set to `keep`:\n * Example request:\n   ```\n   Please open the page <keep>Settings</keep> to configure your system.\n   ```\n * Example response:\n   ```\n   Bitte öffnen Sie die Seite <keep>Settings</keep> um Ihr System zu konfigurieren.\n   ```\n",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/translate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"translate"
+							]
+						},
+						"description": "The translate function.\n\nThe total request body size must not exceed 128 KiB (128 · 1024 bytes). Please split up your text into multiple  \ncalls if it exceeds this limit."
+					},
+					"response": [
+						{
+							"name": "The translate function returns a JSON representation of the translations in the order the text parameters have been specified.",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "text",
+											"value": "Hello, world!",
+											"description": "(Required) Text to be translated. Only UTF-8-encoded plain text is supported. The parameter may be specified multiple times and translations are returned in the same order as they are requested. Each of the parameter values may contain multiple sentences."
+										},
+										{
+											"key": "target_lang",
+											"value": "DE",
+											"description": "(Required) The language into which the text should be translated. Options currently available:\n * `BG` - Bulgarian\n * `CS` - Czech\n * `DA` - Danish\n * `DE` - German\n * `EL` - Greek\n * `EN` - English (unspecified variant for backward compatibility; please select `EN-GB` or `EN-US` instead)\n * `EN-GB` - English (British)\n * `EN-US` - English (American)\n * `ES` - Spanish\n * `ET` - Estonian\n * `FI` - Finnish\n * `FR` - French\n * `HU` - Hungarian\n * `ID` - Indonesian\n * `IT` - Italian\n * `JA` - Japanese\n * `KO` - Korean\n * `LT` - Lithuanian\n * `LV` - Latvian\n * `NB` - Norwegian (Bokmål)\n * `NL` - Dutch\n * `PL` - Polish\n * `PT` - Portuguese (unspecified variant for backward compatibility; please select `PT-BR` or `PT-PT` instead)\n * `PT-BR` - Portuguese (Brazilian)\n * `PT-PT` - Portuguese (all Portuguese varieties excluding Brazilian Portuguese)\n * `RO` - Romanian\n * `RU` - Russian\n * `SK` - Slovak\n * `SL` - Slovenian\n * `SV` - Swedish\n * `TR` - Turkish\n * `UK` - Ukrainian\n * `ZH` - Chinese (simplified)\n"
+										},
+										{
+											"key": "source_lang",
+											"value": "",
+											"description": "Language of the text to be translated. Options currently available:\n * `BG` - Bulgarian\n * `CS` - Czech\n * `DA` - Danish\n * `DE` - German\n * `EL` - Greek\n * `EN` - English\n * `ES` - Spanish\n * `ET` - Estonian\n * `FI` - Finnish\n * `FR` - French\n * `HU` - Hungarian\n * `ID` - Indonesian\n * `IT` - Italian\n * `JA` - Japanese\n * `KO` - Korean\n * `LT` - Lithuanian\n * `LV` - Latvian\n * `NB` - Norwegian (Bokmål)\n * `NL` - Dutch\n * `PL` - Polish\n * `PT` - Portuguese (all Portuguese varieties mixed)\n * `RO` - Romanian\n * `RU` - Russian\n * `SK` - Slovak\n * `SL` - Slovenian\n * `SV` - Swedish\n * `TR` - Turkish\n * `UK` - Ukrainian\n * `ZH` - Chinese\n\nIf this parameter is omitted, the API will attempt to detect the language of the text and translate it.\n"
+										},
+										{
+											"key": "split_sentences",
+											"value": "1",
+											"description": "Sets whether the translation engine should first split the input into sentences. For text translations where\n`tag_handling` is not set to `html`, the default value is `1`, meaning the engine splits on punctuation and on newlines.\n\nFor text translations where `tag_handling=html`, the default value is `nonewlines`, meaning the engine splits on punctuation only, ignoring newlines.\n\nThe use of `nonewlines` as the default value for text translations where `tag_handling=html` is new behavior that was implemented in November 2022,\nwhen HTML handling was moved out of beta.\n\nPossible values are:\n\n * `0` - no splitting at all, whole input is treated as one sentence\n * `1` (default when `tag_handling` is not set to `html`) - splits on punctuation and on newlines\n * `nonewlines` (default when `tag_handling=html`) - splits on punctuation only, ignoring newlines\n\nFor applications that send one sentence per text parameter, we recommend setting `split_sentences` to `0`, in order to prevent the engine from splitting the sentence unintentionally.\n\n\nPlease note that newlines will split sentences when `split_sentences=1`. We recommend cleaning files so they don't contain breaking sentences or setting the parameter `split_sentences` to `nonewlines`.\n",
+											"disabled": true
+										},
+										{
+											"key": "preserve_formatting",
+											"value": "0",
+											"description": "Sets whether the translation engine should respect the original formatting, even if it would usually correct some aspects. Possible values are:\n * `0` (default)\n * `1`\n\nThe formatting aspects affected by this setting include:\n * Punctuation at the beginning and end of the sentence\n * Upper/lower case at the beginning of the sentence\n",
+											"disabled": true
+										},
+										{
+											"key": "formality",
+											"value": "default",
+											"description": "Sets whether the translated text should lean towards formal or informal language.\nThis feature currently only works for target languages\n`DE` (German),\n`FR` (French),\n`IT` (Italian),\n`ES` (Spanish),\n`NL` (Dutch),\n`PL` (Polish),\n`PT-PT`,\n`PT-BR` (Portuguese)\nand `RU` (Russian).\nSetting this parameter with a target language that does not support formality will fail,\nunless one of the `prefer_...` options are used.\nPossible options are:\n  * `default` (default)\n  * `more` - for a more formal language\n  * `less` - for a more informal language\n  * `prefer_more` - for a more formal language if available, otherwise fallback to default formality\n  * `prefer_less` - for a more informal language if available, otherwise fallback to default formality\n",
+											"disabled": true
+										},
+										{
+											"key": "glossary_id",
+											"value": "<string>",
+											"description": "Specify the glossary to use for the translation. **Important:** This requires the `source_lang` parameter to be set and the language pair of the glossary has to match the language pair of the request.\n",
+											"disabled": true
+										},
+										{
+											"key": "tag_handling",
+											"value": "html",
+											"description": "Sets which kind of tags should be handled. Options currently available:\n * `xml`: Enable XML tag handling; see :apiDocsLink{section=\"xml\"}.\n * `html`: Enable HTML tag handling; see :apiDocsLink{section=\"html\"}.\n",
+											"disabled": true
+										},
+										{
+											"key": "non_splitting_tags",
+											"value": "<string>",
+											"description": "Comma-separated list of XML tags which never split sentences.\n\n\nFor some XML files, finding tags with textual content and splitting sentences using those tags won't yield the best results. The following example shows the engine splitting sentences on `par` tags and proceeding to translate the parts separately, resulting in an incorrect translation:\n * Example request:\n```\n<par>The firm said it had been </par><par> conducting an internal investigation.</par>\n```\n * Example response:\n```\n<par>Die Firma sagte, es sei eine gute Idee gewesen.</par><par> Durchführung einer internen Untersuchung.</par>\n```\n\n\nAs this can lead to bad translations, this type of structure should either be avoided, or the `non_splitting_tags` parameter should be set. The following example shows the same call, with the parameter set to `par`:\n * Example request:\n```\n<par>The firm said it had been </par><par> conducting an internal investigation.</par>\n```\n * Example response:\n```\n<par>Die Firma sagte, dass sie</par><par> eine interne Untersuchung durchgeführt</par><par> habe</par><par>.</par>\n```\n\n\nThis time, the sentence is translated as a whole. The XML tags are now considered markup and copied into the translated sentence. As the translation of the words \"had been\" has moved to another position in the German sentence, the two par tags are duplicated (which is expected here).\n",
+											"disabled": true
+										},
+										{
+											"key": "outline_detection",
+											"value": "0",
+											"description": "The automatic detection of the XML structure won't yield best results in all XML files. You can disable this automatic mechanism altogether by setting the `outline_detection` parameter to `0` and selecting the tags that should be considered structure tags. This will split sentences using the `splitting_tags` parameter.\n\n\nIn the example below, we achieve the same results as the automatic engine by disabling automatic detection with `outline_detection=0` and setting the parameters manually to `tag_handling=xml`, `split_sentences=nonewlines`,  and `splitting_tags=par,title`.\n * Example request:\n   ```\n   <document>\n     <meta>\n       <title>A document's title</title>\n     </meta>\n     <content>\n       <par>This is the first sentence. Followed by a second one.</par>\n       <par>This is the third sentence.</par>\n     </content>\n   </document>\n   ```\n * Example response:\n   ```\n   <document>\n     <meta>\n       <title>Der Titel eines Dokuments</title>\n     </meta>\n     <content>\n       <par>Das ist der erste Satz. Gefolgt von einem zweiten.</par>\n       <par>Dies ist der dritte Satz.</par>\n     </content>\n   </document>\n   ```\nWhile this approach is slightly more complicated, it allows for greater control over the structure of the translation output.\n",
+											"disabled": true
+										},
+										{
+											"key": "splitting_tags",
+											"value": "<string>",
+											"description": "Comma-separated list of XML tags which always cause splits.\n\n\nSee the example in the `outline_detection` parameter's description.\n",
+											"disabled": true
+										},
+										{
+											"key": "ignore_tags",
+											"value": "<string>",
+											"description": "Comma-separated list of XML tags that indicate text not to be translated.\n\n\nUse this paramter to ensure that elements in the original text are not altered in the translation (e.g., trademarks, product names) and insert tags into your original text. In the following example, the `ignore_tags` parameter is set to `keep`:\n * Example request:\n   ```\n   Please open the page <keep>Settings</keep> to configure your system.\n   ```\n * Example response:\n   ```\n   Bitte öffnen Sie die Seite <keep>Settings</keep> um Ihr System zu konfigurieren.\n   ```\n",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/translate",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"translate"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"translations\": [\n        {\n            \"detected_source_language\": \"NB\",\n            \"text\": \"<string>\"\n        }\n    ]\n}"
+						},
+						{
+							"name": "Context parameter example",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "text",
+											"value": "Hello, world!",
+											"description": "(Required) Text to be translated. Only UTF-8-encoded plain text is supported. The parameter may be specified multiple times and translations are returned in the same order as they are requested. Each of the parameter values may contain multiple sentences."
+										},
+										{
+											"key": "target_lang",
+											"value": "FR",
+											"description": "(Required) The language into which the text should be translated. Options currently available:\n * `BG` - Bulgarian\n * `CS` - Czech\n * `DA` - Danish\n * `DE` - German\n * `EL` - Greek\n * `EN` - English (unspecified variant for backward compatibility; please select `EN-GB` or `EN-US` instead)\n * `EN-GB` - English (British)\n * `EN-US` - English (American)\n * `ES` - Spanish\n * `ET` - Estonian\n * `FI` - Finnish\n * `FR` - French\n * `HU` - Hungarian\n * `ID` - Indonesian\n * `IT` - Italian\n * `JA` - Japanese\n * `KO` - Korean\n * `LT` - Lithuanian\n * `LV` - Latvian\n * `NB` - Norwegian (Bokmål)\n * `NL` - Dutch\n * `PL` - Polish\n * `PT` - Portuguese (unspecified variant for backward compatibility; please select `PT-BR` or `PT-PT` instead)\n * `PT-BR` - Portuguese (Brazilian)\n * `PT-PT` - Portuguese (all Portuguese varieties excluding Brazilian Portuguese)\n * `RO` - Romanian\n * `RU` - Russian\n * `SK` - Slovak\n * `SL` - Slovenian\n * `SV` - Swedish\n * `TR` - Turkish\n * `UK` - Ukrainian\n * `ZH` - Chinese (simplified)\n"
+										},
+										{
+											"key": "source_lang",
+											"value": "EN",
+											"description": "Language of the text to be translated. Options currently available:\n * `BG` - Bulgarian\n * `CS` - Czech\n * `DA` - Danish\n * `DE` - German\n * `EL` - Greek\n * `EN` - English\n * `ES` - Spanish\n * `ET` - Estonian\n * `FI` - Finnish\n * `FR` - French\n * `HU` - Hungarian\n * `ID` - Indonesian\n * `IT` - Italian\n * `JA` - Japanese\n * `KO` - Korean\n * `LT` - Lithuanian\n * `LV` - Latvian\n * `NB` - Norwegian (Bokmål)\n * `NL` - Dutch\n * `PL` - Polish\n * `PT` - Portuguese (all Portuguese varieties mixed)\n * `RO` - Romanian\n * `RU` - Russian\n * `SK` - Slovak\n * `SL` - Slovenian\n * `SV` - Swedish\n * `TR` - Turkish\n * `UK` - Ukrainian\n * `ZH` - Chinese\n\nIf this parameter is omitted, the API will attempt to detect the language of the text and translate it.\n"
+										},
+										{
+											"key": "context",
+											"value": "This is a classic programming example saying hello to the earth",
+											"description": "Try enabling and disabling this paramater to see how additional context can benefit translation accuracy",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/translate",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"translate"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"translations\": [\n        {\n            \"detected_source_language\": \"NB\",\n            \"text\": \"<string>\"\n        }\n    ]\n}"
+						},
+						{
+							"name": "Ignore tags example",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "text",
+											"value": "Please translate everything in this sentence <do_not_translate>except for this content</do_not_translate>",
+											"description": "(Required) Text to be translated. Only UTF-8-encoded plain text is supported. The parameter may be specified multiple times and translations are returned in the same order as they are requested. Each of the parameter values may contain multiple sentences."
+										},
+										{
+											"key": "target_lang",
+											"value": "DE",
+											"description": "(Required) The language into which the text should be translated. Options currently available:\n * `BG` - Bulgarian\n * `CS` - Czech\n * `DA` - Danish\n * `DE` - German\n * `EL` - Greek\n * `EN` - English (unspecified variant for backward compatibility; please select `EN-GB` or `EN-US` instead)\n * `EN-GB` - English (British)\n * `EN-US` - English (American)\n * `ES` - Spanish\n * `ET` - Estonian\n * `FI` - Finnish\n * `FR` - French\n * `HU` - Hungarian\n * `ID` - Indonesian\n * `IT` - Italian\n * `JA` - Japanese\n * `KO` - Korean\n * `LT` - Lithuanian\n * `LV` - Latvian\n * `NB` - Norwegian (Bokmål)\n * `NL` - Dutch\n * `PL` - Polish\n * `PT` - Portuguese (unspecified variant for backward compatibility; please select `PT-BR` or `PT-PT` instead)\n * `PT-BR` - Portuguese (Brazilian)\n * `PT-PT` - Portuguese (all Portuguese varieties excluding Brazilian Portuguese)\n * `RO` - Romanian\n * `RU` - Russian\n * `SK` - Slovak\n * `SL` - Slovenian\n * `SV` - Swedish\n * `TR` - Turkish\n * `UK` - Ukrainian\n * `ZH` - Chinese (simplified)\n"
+										},
+										{
+											"key": "source_lang",
+											"value": "",
+											"description": "Language of the text to be translated. Options currently available:\n * `BG` - Bulgarian\n * `CS` - Czech\n * `DA` - Danish\n * `DE` - German\n * `EL` - Greek\n * `EN` - English\n * `ES` - Spanish\n * `ET` - Estonian\n * `FI` - Finnish\n * `FR` - French\n * `HU` - Hungarian\n * `ID` - Indonesian\n * `IT` - Italian\n * `JA` - Japanese\n * `KO` - Korean\n * `LT` - Lithuanian\n * `LV` - Latvian\n * `NB` - Norwegian (Bokmål)\n * `NL` - Dutch\n * `PL` - Polish\n * `PT` - Portuguese (all Portuguese varieties mixed)\n * `RO` - Romanian\n * `RU` - Russian\n * `SK` - Slovak\n * `SL` - Slovenian\n * `SV` - Swedish\n * `TR` - Turkish\n * `UK` - Ukrainian\n * `ZH` - Chinese\n\nIf this parameter is omitted, the API will attempt to detect the language of the text and translate it.\n",
+											"disabled": true
+										},
+										{
+											"key": "split_sentences",
+											"value": "1",
+											"description": "Sets whether the translation engine should first split the input into sentences. For text translations where\n`tag_handling` is not set to `html`, the default value is `1`, meaning the engine splits on punctuation and on newlines.\n\nFor text translations where `tag_handling=html`, the default value is `nonewlines`, meaning the engine splits on punctuation only, ignoring newlines.\n\nThe use of `nonewlines` as the default value for text translations where `tag_handling=html` is new behavior that was implemented in November 2022,\nwhen HTML handling was moved out of beta.\n\nPossible values are:\n\n * `0` - no splitting at all, whole input is treated as one sentence\n * `1` (default when `tag_handling` is not set to `html`) - splits on punctuation and on newlines\n * `nonewlines` (default when `tag_handling=html`) - splits on punctuation only, ignoring newlines\n\nFor applications that send one sentence per text parameter, we recommend setting `split_sentences` to `0`, in order to prevent the engine from splitting the sentence unintentionally.\n\n\nPlease note that newlines will split sentences when `split_sentences=1`. We recommend cleaning files so they don't contain breaking sentences or setting the parameter `split_sentences` to `nonewlines`.\n",
+											"disabled": true
+										},
+										{
+											"key": "preserve_formatting",
+											"value": "0",
+											"description": "Sets whether the translation engine should respect the original formatting, even if it would usually correct some aspects. Possible values are:\n * `0` (default)\n * `1`\n\nThe formatting aspects affected by this setting include:\n * Punctuation at the beginning and end of the sentence\n * Upper/lower case at the beginning of the sentence\n",
+											"disabled": true
+										},
+										{
+											"key": "formality",
+											"value": "default",
+											"description": "Sets whether the translated text should lean towards formal or informal language.\nThis feature currently only works for target languages\n`DE` (German),\n`FR` (French),\n`IT` (Italian),\n`ES` (Spanish),\n`NL` (Dutch),\n`PL` (Polish),\n`PT-PT`,\n`PT-BR` (Portuguese)\nand `RU` (Russian).\nSetting this parameter with a target language that does not support formality will fail,\nunless one of the `prefer_...` options are used.\nPossible options are:\n  * `default` (default)\n  * `more` - for a more formal language\n  * `less` - for a more informal language\n  * `prefer_more` - for a more formal language if available, otherwise fallback to default formality\n  * `prefer_less` - for a more informal language if available, otherwise fallback to default formality\n",
+											"disabled": true
+										},
+										{
+											"key": "glossary_id",
+											"value": "<string>",
+											"description": "Specify the glossary to use for the translation. **Important:** This requires the `source_lang` parameter to be set and the language pair of the glossary has to match the language pair of the request.\n",
+											"disabled": true
+										},
+										{
+											"key": "tag_handling",
+											"value": "xml",
+											"description": "Sets which kind of tags should be handled. Options currently available:\n * `xml`: Enable XML tag handling; see :apiDocsLink{section=\"xml\"}.\n * `html`: Enable HTML tag handling; see :apiDocsLink{section=\"html\"}.\n"
+										},
+										{
+											"key": "non_splitting_tags",
+											"value": "<string>",
+											"description": "Comma-separated list of XML tags which never split sentences.\n\n\nFor some XML files, finding tags with textual content and splitting sentences using those tags won't yield the best results. The following example shows the engine splitting sentences on `par` tags and proceeding to translate the parts separately, resulting in an incorrect translation:\n * Example request:\n```\n<par>The firm said it had been </par><par> conducting an internal investigation.</par>\n```\n * Example response:\n```\n<par>Die Firma sagte, es sei eine gute Idee gewesen.</par><par> Durchführung einer internen Untersuchung.</par>\n```\n\n\nAs this can lead to bad translations, this type of structure should either be avoided, or the `non_splitting_tags` parameter should be set. The following example shows the same call, with the parameter set to `par`:\n * Example request:\n```\n<par>The firm said it had been </par><par> conducting an internal investigation.</par>\n```\n * Example response:\n```\n<par>Die Firma sagte, dass sie</par><par> eine interne Untersuchung durchgeführt</par><par> habe</par><par>.</par>\n```\n\n\nThis time, the sentence is translated as a whole. The XML tags are now considered markup and copied into the translated sentence. As the translation of the words \"had been\" has moved to another position in the German sentence, the two par tags are duplicated (which is expected here).\n",
+											"disabled": true
+										},
+										{
+											"key": "outline_detection",
+											"value": "0",
+											"description": "The automatic detection of the XML structure won't yield best results in all XML files. You can disable this automatic mechanism altogether by setting the `outline_detection` parameter to `0` and selecting the tags that should be considered structure tags. This will split sentences using the `splitting_tags` parameter.\n\n\nIn the example below, we achieve the same results as the automatic engine by disabling automatic detection with `outline_detection=0` and setting the parameters manually to `tag_handling=xml`, `split_sentences=nonewlines`,  and `splitting_tags=par,title`.\n * Example request:\n   ```\n   <document>\n     <meta>\n       <title>A document's title</title>\n     </meta>\n     <content>\n       <par>This is the first sentence. Followed by a second one.</par>\n       <par>This is the third sentence.</par>\n     </content>\n   </document>\n   ```\n * Example response:\n   ```\n   <document>\n     <meta>\n       <title>Der Titel eines Dokuments</title>\n     </meta>\n     <content>\n       <par>Das ist der erste Satz. Gefolgt von einem zweiten.</par>\n       <par>Dies ist der dritte Satz.</par>\n     </content>\n   </document>\n   ```\nWhile this approach is slightly more complicated, it allows for greater control over the structure of the translation output.\n",
+											"disabled": true
+										},
+										{
+											"key": "splitting_tags",
+											"value": "<string>",
+											"description": "Comma-separated list of XML tags which always cause splits.\n\n\nSee the example in the `outline_detection` parameter's description.\n",
+											"disabled": true
+										},
+										{
+											"key": "ignore_tags",
+											"value": "do_not_translate",
+											"description": "Comma-separated list of XML tags that indicate text not to be translated.\n\n\nUse this paramter to ensure that elements in the original text are not altered in the translation (e.g., trademarks, product names) and insert tags into your original text. In the following example, the `ignore_tags` parameter is set to `keep`:\n * Example request:\n   ```\n   Please open the page <keep>Settings</keep> to configure your system.\n   ```\n * Example response:\n   ```\n   Bitte öffnen Sie die Seite <keep>Settings</keep> um Ihr System zu konfigurieren.\n   ```\n"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/translate",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"translate"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "languages",
+			"item": [
+				{
+					"name": "Retrieve Supported Languages",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/languages?type=source",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"languages"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "source",
+									"description": "Sets whether source or target languages should be listed. Possible options are:\n * `source` (default): For languages that can be used in the `source_lang` parameter of :apiDocsLink[translate]{operationId=translateText} requests.\n * `target`: For languages that can be used in the `target_lang` parameter of :apiDocsLink[translate]{operationId=translateText} requests.\n"
+								}
+							]
+						},
+						"description": "Retrieve the list of languages that are currently supported for translation, either as source or target language, respectively."
+					},
+					"response": [
+						{
+							"name": "JSON array where each item represents a supported language.",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "<API Key>",
+										"description": "Added as a part of security scheme: apikey"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/languages?type=source",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"languages"
+									],
+									"query": [
+										{
+											"key": "type",
+											"value": "source",
+											"description": "Sets whether source or target languages should be listed. Possible options are:\n * `source` (default): For languages that can be used in the `source_lang` parameter of :apiDocsLink[translate]{operationId=translateText} requests.\n * `target`: For languages that can be used in the `target_lang` parameter of :apiDocsLink[translate]{operationId=translateText} requests.\n"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "[\n  {\n    \"language\": \"<string>\",\n    \"name\": \"<string>\",\n    \"supports_formality\": \"<boolean>\"\n  },\n  {\n    \"language\": \"<string>\",\n    \"name\": \"<string>\",\n    \"supports_formality\": \"<boolean>\"\n  }\n]"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "glossary-language-pairs",
+			"item": [
+				{
+					"name": "List Language Pairs Supported by Glossaries",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/glossary-language-pairs",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"glossary-language-pairs"
+							]
+						},
+						"description": "Retrieve the list of language pairs supported by the glossary feature."
+					},
+					"response": [
+						{
+							"name": "A JSON object containing the language pairs in its `supported_languages` property.\n",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "<API Key>",
+										"description": "Added as a part of security scheme: apikey"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/glossary-language-pairs",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"glossary-language-pairs"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"supported_languages\": [\n    {\n      \"source_lang\": \"<string>\",\n      \"target_lang\": \"<string>\"\n    },\n    {\n      \"source_lang\": \"<string>\",\n      \"target_lang\": \"<string>\"\n    }\n  ]\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "glossaries",
+			"item": [
+				{
+					"name": "{glossary_id}",
+					"item": [
+						{
+							"name": "entries",
+							"item": [
+								{
+									"name": "Retrieve Glossary Entries",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "text/tab-separated-values"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/glossaries/:glossary_id/entries",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"glossaries",
+												":glossary_id",
+												"entries"
+											],
+											"variable": [
+												{
+													"key": "glossary_id",
+													"value": "<string>"
+												}
+											]
+										},
+										"description": "List the entries of a single glossary in the format specified by the `Accept` header."
+									},
+									"response": [
+										{
+											"name": "The entries in the requested format.\n",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "text/tab-separated-values"
+													},
+													{
+														"key": "Authorization",
+														"value": "<API Key>",
+														"description": "Added as a part of security scheme: apikey"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/glossaries/:glossary_id/entries",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"glossaries",
+														":glossary_id",
+														"entries"
+													],
+													"variable": [
+														{
+															"key": "glossary_id"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "text/tab-separated-values"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"example\": \"Hello!\\tGuten Tag!\"\n}"
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "Retrieve Glossary Details",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/glossaries/:glossary_id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"glossaries",
+										":glossary_id"
+									],
+									"variable": [
+										{
+											"key": "glossary_id",
+											"value": "<string>"
+										}
+									]
+								},
+								"description": "Retrieve meta information for a single glossary, omitting the glossary entries."
+							},
+							"response": [
+								{
+									"name": "JSON object containing the glossary meta-information.\n",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"value": "<API Key>",
+												"description": "Added as a part of security scheme: apikey"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/glossaries/:glossary_id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"glossaries",
+												":glossary_id"
+											],
+											"variable": [
+												{
+													"key": "glossary_id"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"glossary_id\": \"<string>\",\n  \"name\": \"<string>\",\n  \"ready\": \"<boolean>\",\n  \"source_lang\": \"ja\",\n  \"target_lang\": \"fr\",\n  \"creation_time\": \"<dateTime>\",\n  \"entry_count\": \"<integer>\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Delete a Glossary",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/glossaries/:glossary_id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"glossaries",
+										":glossary_id"
+									],
+									"variable": [
+										{
+											"key": "glossary_id",
+											"value": "<string>"
+										}
+									]
+								},
+								"description": "Deletes the specified glossary."
+							},
+							"response": [
+								{
+									"name": "Returns no content upon success.\n",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "<API Key>",
+												"description": "Added as a part of security scheme: apikey"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/glossaries/:glossary_id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"glossaries",
+												":glossary_id"
+											],
+											"variable": [
+												{
+													"key": "glossary_id"
+												}
+											]
+										}
+									},
+									"status": "No Content",
+									"code": 204,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": null
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Create a Glossary",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "<string>",
+									"description": "(Required) Name to be associated with the glossary."
+								},
+								{
+									"key": "source_lang",
+									"value": "de",
+									"description": "(Required) The language in which the source texts in the glossary are specified."
+								},
+								{
+									"key": "target_lang",
+									"value": "it",
+									"description": "(Required) The language in which the target texts in the glossary are specified."
+								},
+								{
+									"key": "entries",
+									"value": "<string>",
+									"description": "(Required) The entries of the glossary. The entries have to be specified in the format provided by the `entries_format` parameter."
+								},
+								{
+									"key": "entries_format",
+									"value": "tsv",
+									"description": "(Required) The format in which the glossary entries are provided. Formats currently available:\n- `tsv` (default) - tab-separated values\n- `csv` - comma-separated values\n\nSee :apiDocsLink{section=glossaries/formats} for details about each format.\n"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/glossaries",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"glossaries"
+							]
+						},
+						"description": "**Please note Postman does not support TSV format**"
+					},
+					"response": [
+						{
+							"name": "The function for creating a glossary returns a JSON object containing the ID of the newly created glossary and a boolean flag that indicates if the created glossary can already be used in translate requests.\n",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "<API Key>",
+										"description": "Added as a part of security scheme: apikey"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "<string>",
+											"description": "(Required) Name to be associated with the glossary."
+										},
+										{
+											"key": "source_lang",
+											"value": "de",
+											"description": "(Required) The language in which the source texts in the glossary are specified."
+										},
+										{
+											"key": "target_lang",
+											"value": "it",
+											"description": "(Required) The language in which the target texts in the glossary are specified."
+										},
+										{
+											"key": "entries",
+											"value": "<string>",
+											"description": "(Required) The entries of the glossary. The entries have to be specified in the format provided by the `entries_format` parameter."
+										},
+										{
+											"key": "entries_format",
+											"value": "tsv",
+											"description": "(Required) The format in which the glossary entries are provided. Formats currently available:\n- `tsv` (default) - tab-separated values\n- `csv` - comma-separated values\n\nSee :apiDocsLink{section=glossaries/formats} for details about each format.\n"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/glossaries",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"glossaries"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"glossary_id\": \"<string>\",\n  \"name\": \"<string>\",\n  \"ready\": \"<boolean>\",\n  \"source_lang\": \"ja\",\n  \"target_lang\": \"fr\",\n  \"creation_time\": \"<dateTime>\",\n  \"entry_count\": \"<integer>\"\n}"
+						},
+						{
+							"name": "Create a Glossary example",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "Standardized greeting",
+											"description": "(Required) Name to be associated with the glossary."
+										},
+										{
+											"key": "source_lang",
+											"value": "EN",
+											"description": "(Required) The language in which the source texts in the glossary are specified."
+										},
+										{
+											"key": "target_lang",
+											"value": "DE",
+											"description": "(Required) The language in which the target texts in the glossary are specified."
+										},
+										{
+											"key": "entries",
+											"value": "good morning,hallo\ngood afternoon,hallo\ngood evening,hallo\ngreetings,hallo\ndear,hallo",
+											"description": "(Required) The entries of the glossary. The entries have to be specified in the format provided by the `entries_format` parameter."
+										},
+										{
+											"key": "entries_format",
+											"value": "csv",
+											"description": "(Required) The format in which the glossary entries are provided. Formats currently available:\n- `tsv` (default) - tab-separated values\n- `csv` - comma-separated values\n\nSee :apiDocsLink{section=glossaries/formats} for details about each format.\n"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/glossaries",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"glossaries"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"glossary_id\": \"<string>\",\n    \"name\": \"<string>\",\n    \"ready\": \"<boolean>\",\n    \"source_lang\": \"ja\",\n    \"target_lang\": \"fr\",\n    \"creation_time\": \"<dateTime>\",\n    \"entry_count\": \"<integer>\"\n}"
+						}
+					]
+				},
+				{
+					"name": "List all Glossaries",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/glossaries",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"glossaries"
+							]
+						},
+						"description": "List all glossaries and their meta-information, but not the glossary entries.\n"
+					},
+					"response": [
+						{
+							"name": "JSON object containing a the glossaries.\n",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "<API Key>",
+										"description": "Added as a part of security scheme: apikey"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/glossaries",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"glossaries"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"glossaries\": [\n    {\n      \"glossary_id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"ready\": \"<boolean>\",\n      \"source_lang\": \"de\",\n      \"target_lang\": \"ja\",\n      \"creation_time\": \"<dateTime>\",\n      \"entry_count\": \"<integer>\"\n    },\n    {\n      \"glossary_id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"ready\": \"<boolean>\",\n      \"source_lang\": \"nl\",\n      \"target_lang\": \"fr\",\n      \"creation_time\": \"<dateTime>\",\n      \"entry_count\": \"<integer>\"\n    }\n  ]\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "document",
+			"item": [
+				{
+					"name": "{document_id}",
+					"item": [
+						{
+							"name": "result",
+							"item": [
+								{
+									"name": "Download Translated Document",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/x-www-form-urlencoded"
+											},
+											{
+												"key": "Accept",
+												"value": "application/octet-stream"
+											}
+										],
+										"body": {
+											"mode": "urlencoded",
+											"urlencoded": [
+												{
+													"key": "document_key",
+													"value": "<string>",
+													"description": "(Required) The document encryption key that was sent to the client when the document was uploaded to the API."
+												}
+											]
+										},
+										"url": {
+											"raw": "{{baseUrl}}/document/:document_id/result",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"document",
+												":document_id",
+												"result"
+											],
+											"variable": [
+												{
+													"key": "document_id",
+													"value": "<string>",
+													"description": "(Required) The document ID that was sent to the client when the document was uploaded to the API."
+												}
+											]
+										},
+										"description": "Once the status of the document translation process is `done`, the result can be downloaded.\n\n\nFor privacy reasons the translated document is automatically removed from the server once it was downloaded and cannot be downloaded again.\n"
+									},
+									"response": [
+										{
+											"name": "The document is provided as a download. There is no other data included in the response besides the document data. The content type used in the response corresponds to the document type.",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/x-www-form-urlencoded"
+													},
+													{
+														"key": "Accept",
+														"value": "application/octet-stream"
+													},
+													{
+														"key": "Authorization",
+														"value": "<API Key>",
+														"description": "Added as a part of security scheme: apikey"
+													}
+												],
+												"body": {
+													"mode": "urlencoded",
+													"urlencoded": [
+														{
+															"key": "document_key",
+															"value": "<string>",
+															"description": "(Required) The document encryption key that was sent to the client when the document was uploaded to the API."
+														}
+													]
+												},
+												"url": {
+													"raw": "{{baseUrl}}/document/:document_id/result",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"document",
+														":document_id",
+														"result"
+													],
+													"variable": [
+														{
+															"key": "document_id"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/octet-stream"
+												}
+											],
+											"cookie": [],
+											"body": "<string>"
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "Check Document Status",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "document_key",
+											"value": "<string>",
+											"description": "(Required) The document encryption key that was sent to the client when the document was uploaded to the API."
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/document/:document_id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"document",
+										":document_id"
+									],
+									"variable": [
+										{
+											"key": "document_id",
+											"value": "<string>",
+											"description": "(Required) The document ID that was sent to the client when the document was uploaded to the API."
+										}
+									]
+								},
+								"description": "Retrieve the current status of a document translation process.\nIf the translation is still in progress, the estimated time remaining is also included in the response.\n"
+							},
+							"response": [
+								{
+									"name": "The document status request returns a JSON object containing the document ID that was used in the request as well as string indicating the current status of the translation process. While the translation is running, the estimated number of seconds remaini",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/x-www-form-urlencoded"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"value": "<API Key>",
+												"description": "Added as a part of security scheme: apikey"
+											}
+										],
+										"body": {
+											"mode": "urlencoded",
+											"urlencoded": [
+												{
+													"key": "document_key",
+													"value": "<string>",
+													"description": "(Required) The document encryption key that was sent to the client when the document was uploaded to the API."
+												}
+											]
+										},
+										"url": {
+											"raw": "{{baseUrl}}/document/:document_id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"document",
+												":document_id"
+											],
+											"variable": [
+												{
+													"key": "document_id"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"document_id\": \"<string>\",\n  \"status\": \"translating\",\n  \"seconds_remaining\": \"<integer>\",\n  \"billed_characters\": \"<integer>\",\n  \"error_message\": \"<string>\"\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Upload and Translate a Document",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "multipart/form-data"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "target_lang",
+									"value": "DE",
+									"description": "(Required) The language into which the text should be translated. Options currently available:\n * `BG` - Bulgarian\n * `CS` - Czech\n * `DA` - Danish\n * `DE` - German\n * `EL` - Greek\n * `EN` - English (unspecified variant for backward compatibility; please select `EN-GB` or `EN-US` instead)\n * `EN-GB` - English (British)\n * `EN-US` - English (American)\n * `ES` - Spanish\n * `ET` - Estonian\n * `FI` - Finnish\n * `FR` - French\n * `HU` - Hungarian\n * `ID` - Indonesian\n * `IT` - Italian\n * `JA` - Japanese\n * `KO` - Korean\n * `LT` - Lithuanian\n * `LV` - Latvian\n * `NB` - Norwegian (Bokmål)\n * `NL` - Dutch\n * `PL` - Polish\n * `PT` - Portuguese (unspecified variant for backward compatibility; please select `PT-BR` or `PT-PT` instead)\n * `PT-BR` - Portuguese (Brazilian)\n * `PT-PT` - Portuguese (all Portuguese varieties excluding Brazilian Portuguese)\n * `RO` - Romanian\n * `RU` - Russian\n * `SK` - Slovak\n * `SL` - Slovenian\n * `SV` - Swedish\n * `TR` - Turkish\n * `UK` - Ukrainian\n * `ZH` - Chinese (simplified)\n (This can only be one of BG,CS,DA,DE,EL,EN-GB,EN-US,ES,ET,FI,FR,HU,ID,IT,JA,KO,LT,LV,NB,NL,PL,PT-BR,PT-PT,RO,RU,SK,SL,SV,TR,UK,ZH)",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"description": "(Required) The document file to be translated. The file name should be included in this part's content disposition. As an alternative, the filename parameter can be used. The following file types and extensions are supported:\n  * `docx` - Microsoft Word Document\n  * `pptx` - Microsoft PowerPoint Document\n  * `pdf` - Portable Document Format\n  * `htm / html` - HTML Document\n  * `txt` - Plain Text Document\n  * `xlf / xliff` - XLIFF Document, version 2.1\n",
+									"type": "file",
+									"src": "postman-cloud:///1eecc50b-a8d0-4c80-a158-42afca6855cf"
+								},
+								{
+									"key": "source_lang",
+									"value": "",
+									"description": "Language of the text to be translated. Options currently available:\n * `BG` - Bulgarian\n * `CS` - Czech\n * `DA` - Danish\n * `DE` - German\n * `EL` - Greek\n * `EN` - English\n * `ES` - Spanish\n * `ET` - Estonian\n * `FI` - Finnish\n * `FR` - French\n * `HU` - Hungarian\n * `ID` - Indonesian\n * `IT` - Italian\n * `JA` - Japanese\n * `KO` - Korean\n * `LT` - Lithuanian\n * `LV` - Latvian\n * `NB` - Norwegian (Bokmål)\n * `NL` - Dutch\n * `PL` - Polish\n * `PT` - Portuguese (all Portuguese varieties mixed)\n * `RO` - Romanian\n * `RU` - Russian\n * `SK` - Slovak\n * `SL` - Slovenian\n * `SV` - Swedish\n * `TR` - Turkish\n * `UK` - Ukrainian\n * `ZH` - Chinese\n\nIf this parameter is omitted, the API will attempt to detect the language of the text and translate it.\n (This can only be one of BG,CS,DA,DE,EL,EN,ES,ET,FI,FR,HU,ID,IT,JA,KO,LT,LV,NB,NL,PL,PT,RO,RU,SK,SL,SV,TR,UK,ZH)",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "filename",
+									"value": "<string>",
+									"description": "The name of the uploaded file. Can be used as an alternative to including the file name in the file part's content disposition.",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "formality",
+									"value": "default",
+									"description": "Sets whether the translated text should lean towards formal or informal language.\nThis feature currently only works for target languages\n`DE` (German),\n`FR` (French),\n`IT` (Italian),\n`ES` (Spanish),\n`NL` (Dutch),\n`PL` (Polish),\n`PT-PT`,\n`PT-BR` (Portuguese)\nand `RU` (Russian).\nSetting this parameter with a target language that does not support formality will fail,\nunless one of the `prefer_...` options are used.\nPossible options are:\n  * `default` (default)\n  * `more` - for a more formal language\n  * `less` - for a more informal language\n  * `prefer_more` - for a more formal language if available, otherwise fallback to default formality\n  * `prefer_less` - for a more informal language if available, otherwise fallback to default formality\n (This can only be one of default,more,less,prefer_more,prefer_less)",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "glossary_id",
+									"value": "<string>",
+									"description": "A unique ID assigned to a glossary.",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/document",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"document"
+							]
+						},
+						"description": "This call uploads a document and queues it for translation.  \nThe call returns once the upload is complete, returning a document ID and key which can be used to  \n:apiDocsLink\\[query the translation status\\]{operationId=getDocumentStatus}  \nand to :apiDocsLink\\[download the translated document\\]{operationId=downloadDocument} once translation is complete.\n\nBecause the request includes a file upload, it must be an HTTP POST request with content type `multipart/form-data`.\n\nPlease be aware that the uploaded document is automatically removed from the server once the translated document has been downloaded.  \nYou have to upload the document again in order to restart the translation.\n\nThe maximum upload limit for documents is [available here](https://support.deepl.com/hc/articles/360020582359-Document-formats)  \nand may vary based on API plan and document type.\n\nYou may specify the glossary to use for the document translation using the `glossary_id` parameter.  \n**Important:** This requires the `source_lang` parameter to be set and the language pair of the glossary has to match the language pair of the request."
+					},
+					"response": [
+						{
+							"name": "The document function returns a JSON object containing the ID and encryption key assigned to the uploaded document. Once received by the server, uploaded documents are immediately encrypted using a uniquely generated encryption key. This key is not persis",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "multipart/form-data"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "<API Key>",
+										"description": "Added as a part of security scheme: apikey"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "target_lang",
+											"value": "ET",
+											"description": "(Required) The language into which the text should be translated. Options currently available:\n * `BG` - Bulgarian\n * `CS` - Czech\n * `DA` - Danish\n * `DE` - German\n * `EL` - Greek\n * `EN` - English (unspecified variant for backward compatibility; please select `EN-GB` or `EN-US` instead)\n * `EN-GB` - English (British)\n * `EN-US` - English (American)\n * `ES` - Spanish\n * `ET` - Estonian\n * `FI` - Finnish\n * `FR` - French\n * `HU` - Hungarian\n * `ID` - Indonesian\n * `IT` - Italian\n * `JA` - Japanese\n * `KO` - Korean\n * `LT` - Lithuanian\n * `LV` - Latvian\n * `NB` - Norwegian (Bokmål)\n * `NL` - Dutch\n * `PL` - Polish\n * `PT` - Portuguese (unspecified variant for backward compatibility; please select `PT-BR` or `PT-PT` instead)\n * `PT-BR` - Portuguese (Brazilian)\n * `PT-PT` - Portuguese (all Portuguese varieties excluding Brazilian Portuguese)\n * `RO` - Romanian\n * `RU` - Russian\n * `SK` - Slovak\n * `SL` - Slovenian\n * `SV` - Swedish\n * `TR` - Turkish\n * `UK` - Ukrainian\n * `ZH` - Chinese (simplified)\n (This can only be one of BG,CS,DA,DE,EL,EN-GB,EN-US,ES,ET,FI,FR,HU,ID,IT,JA,KO,LT,LV,NB,NL,PL,PT-BR,PT-PT,RO,RU,SK,SL,SV,TR,UK,ZH)",
+											"type": "text"
+										},
+										{
+											"key": "file",
+											"value": "<string>",
+											"description": "(Required) The document file to be translated. The file name should be included in this part's content disposition. As an alternative, the filename parameter can be used. The following file types and extensions are supported:\n  * `docx` - Microsoft Word Document\n  * `pptx` - Microsoft PowerPoint Document\n  * `pdf` - Portable Document Format\n  * `htm / html` - HTML Document\n  * `txt` - Plain Text Document\n  * `xlf / xliff` - XLIFF Document, version 2.1\n",
+											"type": "text"
+										},
+										{
+											"key": "source_lang",
+											"value": "SV",
+											"description": "Language of the text to be translated. Options currently available:\n * `BG` - Bulgarian\n * `CS` - Czech\n * `DA` - Danish\n * `DE` - German\n * `EL` - Greek\n * `EN` - English\n * `ES` - Spanish\n * `ET` - Estonian\n * `FI` - Finnish\n * `FR` - French\n * `HU` - Hungarian\n * `ID` - Indonesian\n * `IT` - Italian\n * `JA` - Japanese\n * `KO` - Korean\n * `LT` - Lithuanian\n * `LV` - Latvian\n * `NB` - Norwegian (Bokmål)\n * `NL` - Dutch\n * `PL` - Polish\n * `PT` - Portuguese (all Portuguese varieties mixed)\n * `RO` - Romanian\n * `RU` - Russian\n * `SK` - Slovak\n * `SL` - Slovenian\n * `SV` - Swedish\n * `TR` - Turkish\n * `UK` - Ukrainian\n * `ZH` - Chinese\n\nIf this parameter is omitted, the API will attempt to detect the language of the text and translate it.\n (This can only be one of BG,CS,DA,DE,EL,EN,ES,ET,FI,FR,HU,ID,IT,JA,KO,LT,LV,NB,NL,PL,PT,RO,RU,SK,SL,SV,TR,UK,ZH)",
+											"type": "text"
+										},
+										{
+											"key": "filename",
+											"value": "<string>",
+											"description": "The name of the uploaded file. Can be used as an alternative to including the file name in the file part's content disposition.",
+											"type": "text"
+										},
+										{
+											"key": "formality",
+											"value": "default",
+											"description": "Sets whether the translated text should lean towards formal or informal language.\nThis feature currently only works for target languages\n`DE` (German),\n`FR` (French),\n`IT` (Italian),\n`ES` (Spanish),\n`NL` (Dutch),\n`PL` (Polish),\n`PT-PT`,\n`PT-BR` (Portuguese)\nand `RU` (Russian).\nSetting this parameter with a target language that does not support formality will fail,\nunless one of the `prefer_...` options are used.\nPossible options are:\n  * `default` (default)\n  * `more` - for a more formal language\n  * `less` - for a more informal language\n  * `prefer_more` - for a more formal language if available, otherwise fallback to default formality\n  * `prefer_less` - for a more informal language if available, otherwise fallback to default formality\n (This can only be one of default,more,less,prefer_more,prefer_less)",
+											"type": "text"
+										},
+										{
+											"key": "glossary_id",
+											"value": "<string>",
+											"description": "A unique ID assigned to a glossary.",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/document",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"document"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"document_id\": \"<string>\",\n  \"document_key\": \"<string>\"\n}"
+						},
+						{
+							"name": "Document upload example",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "multipart/form-data"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "target_lang",
+											"value": "DE",
+											"description": "(Required) The language into which the text should be translated. Options currently available:\n * `BG` - Bulgarian\n * `CS` - Czech\n * `DA` - Danish\n * `DE` - German\n * `EL` - Greek\n * `EN` - English (unspecified variant for backward compatibility; please select `EN-GB` or `EN-US` instead)\n * `EN-GB` - English (British)\n * `EN-US` - English (American)\n * `ES` - Spanish\n * `ET` - Estonian\n * `FI` - Finnish\n * `FR` - French\n * `HU` - Hungarian\n * `ID` - Indonesian\n * `IT` - Italian\n * `JA` - Japanese\n * `KO` - Korean\n * `LT` - Lithuanian\n * `LV` - Latvian\n * `NB` - Norwegian (Bokmål)\n * `NL` - Dutch\n * `PL` - Polish\n * `PT` - Portuguese (unspecified variant for backward compatibility; please select `PT-BR` or `PT-PT` instead)\n * `PT-BR` - Portuguese (Brazilian)\n * `PT-PT` - Portuguese (all Portuguese varieties excluding Brazilian Portuguese)\n * `RO` - Romanian\n * `RU` - Russian\n * `SK` - Slovak\n * `SL` - Slovenian\n * `SV` - Swedish\n * `TR` - Turkish\n * `UK` - Ukrainian\n * `ZH` - Chinese (simplified)\n (This can only be one of BG,CS,DA,DE,EL,EN-GB,EN-US,ES,ET,FI,FR,HU,ID,IT,JA,KO,LT,LV,NB,NL,PL,PT-BR,PT-PT,RO,RU,SK,SL,SV,TR,UK,ZH)",
+											"type": "text"
+										},
+										{
+											"key": "file",
+											"description": "(Required) The document file to be translated. The file name should be included in this part's content disposition. As an alternative, the filename parameter can be used. The following file types and extensions are supported:\n  * `docx` - Microsoft Word Document\n  * `pptx` - Microsoft PowerPoint Document\n  * `pdf` - Portable Document Format\n  * `htm / html` - HTML Document\n  * `txt` - Plain Text Document\n  * `xlf / xliff` - XLIFF Document, version 2.1\n",
+											"type": "file",
+											"src": "postman-cloud:///1eecc50b-a8d0-4c80-a158-42afca6855cf"
+										},
+										{
+											"key": "source_lang",
+											"value": "",
+											"description": "Language of the text to be translated. Options currently available:\n * `BG` - Bulgarian\n * `CS` - Czech\n * `DA` - Danish\n * `DE` - German\n * `EL` - Greek\n * `EN` - English\n * `ES` - Spanish\n * `ET` - Estonian\n * `FI` - Finnish\n * `FR` - French\n * `HU` - Hungarian\n * `ID` - Indonesian\n * `IT` - Italian\n * `JA` - Japanese\n * `KO` - Korean\n * `LT` - Lithuanian\n * `LV` - Latvian\n * `NB` - Norwegian (Bokmål)\n * `NL` - Dutch\n * `PL` - Polish\n * `PT` - Portuguese (all Portuguese varieties mixed)\n * `RO` - Romanian\n * `RU` - Russian\n * `SK` - Slovak\n * `SL` - Slovenian\n * `SV` - Swedish\n * `TR` - Turkish\n * `UK` - Ukrainian\n * `ZH` - Chinese\n\nIf this parameter is omitted, the API will attempt to detect the language of the text and translate it.\n (This can only be one of BG,CS,DA,DE,EL,EN,ES,ET,FI,FR,HU,ID,IT,JA,KO,LT,LV,NB,NL,PL,PT,RO,RU,SK,SL,SV,TR,UK,ZH)",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "filename",
+											"value": "<string>",
+											"description": "The name of the uploaded file. Can be used as an alternative to including the file name in the file part's content disposition.",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "formality",
+											"value": "default",
+											"description": "Sets whether the translated text should lean towards formal or informal language.\nThis feature currently only works for target languages\n`DE` (German),\n`FR` (French),\n`IT` (Italian),\n`ES` (Spanish),\n`NL` (Dutch),\n`PL` (Polish),\n`PT-PT`,\n`PT-BR` (Portuguese)\nand `RU` (Russian).\nSetting this parameter with a target language that does not support formality will fail,\nunless one of the `prefer_...` options are used.\nPossible options are:\n  * `default` (default)\n  * `more` - for a more formal language\n  * `less` - for a more informal language\n  * `prefer_more` - for a more formal language if available, otherwise fallback to default formality\n  * `prefer_less` - for a more informal language if available, otherwise fallback to default formality\n (This can only be one of default,more,less,prefer_more,prefer_less)",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "glossary_id",
+											"value": "<string>",
+											"description": "A unique ID assigned to a glossary.",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/document",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"document"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "write",
+			"item": [
+				{
+					"name": "rephrase",
+					"item": [
+						{
+							"name": "Request Rephrasing",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded",
+										"type": "text"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "text",
+											"value": "Hallo Weltt!",
+											"description": "(Required) Text to be improved. Only UTF-8-encoded plain text is supported. The parameter may be specified multiple times and translations are returned in the same order as they are requested. Each of the parameter values may contain multiple sentences.",
+											"type": "text"
+										},
+										{
+											"key": "target_lang",
+											"value": "DE",
+											"description": "Language of the request. Can be used to change a text from one variant to the other (eg American to British English), or to avoid false source language detection.\nThis request will not translate (well), use the `/translate` endpoint for that!\n",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "writing_style",
+											"value": "business",
+											"description": "Style the improved text should be in. Only a style OR a tone can be used at the moment, and only certain languages support styles and tones. You can prefix a style or tone with `prefer_` to not get an error when using a style with a language that does not support it.\n\nThe currently available styles are:\n\nsimple\n\nbusiness\n\nacademic\n\ncasual\n\ndefault\n\nprefer_simple\n\nprefer_business\n\nprefer_academic\n\nprefer_casual\n",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "tone",
+											"value": "diplomatic",
+											"description": "Tone the improved text should be in. Only a style OR a tone can be used at the moment, and only certain languages support styles and tones. You can prefix a style or tone with `prefer_` to not get an error when using a style with a language that does not support it.\n\nCurrently supported tones are:\n\nenthusiastic\n\nfriendly\n\nconfident\n\ndiplomatic\n\ndefault\n\nprefer_enthusiastic\n\nprefer_friendly\n\nprefer_confident\n\nprefer_diplomatic",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "https://api.deepl.com/v2/write/rephrase",
+									"protocol": "https",
+									"host": [
+										"api",
+										"deepl",
+										"com"
+									],
+									"path": [
+										"v2",
+										"write",
+										"rephrase"
+									]
+								},
+								"description": "The rephrase function (Write API).\n\nThe total request body size must not exceed 10 KiB (10 · 1024 bytes). Please split up your text into multiple  \ncalls if it exceeds this limit."
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "DeepL-Auth-Key {{apiKey}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "Authorization",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://api.deepl.com/v2"
+		},
+		{
+			"key": "baseUrl",
+			"value": "https://api-free.deepl.com/v2",
+			"type": "string",
+			"disabled": true
+		},
+		{
+			"key": "apiKey",
+			"value": "yourDeepLApiKey",
+			"type": "string"
+		}
+	]
+}
